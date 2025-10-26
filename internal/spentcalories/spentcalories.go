@@ -26,7 +26,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 
 	parts := strings.Split(data, ",")
 	if len(parts) != 3 {
-		fmt.Println("ожидалось три значения через запятую")
+		log.Println("ожидалось три значения через запятую")
 		return 0, "", 0, errInvalidInput
 	}
 
@@ -36,7 +36,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 
 	steps, err := strconv.Atoi(stepsStr)
 	if err != nil || steps <= 0 {
-		fmt.Println("количество шагов должно быть больше 0")
+		log.Println("количество шагов должно быть больше 0")
 		return 0, "", 0, errInvalidInput
 	}
 
@@ -46,7 +46,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 
 	duration, err := time.ParseDuration(durationStr)
 	if err != nil || duration <= 0 {
-		fmt.Println("продолжительность должна быть больше 0")
+		log.Println("продолжительность должна быть больше 0")
 		return 0, "", 0, errInvalidInput
 	}
 	return steps, trainingType, duration, nil
@@ -112,19 +112,19 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 
 	if steps <= 0 {
-		fmt.Println("количество шагов должно быть больше 0")
+		log.Println("количество шагов должно быть больше 0")
 		return 0, errInvalidInput
 	}
 	if weight <= 0 {
-		fmt.Println("вес должен быть больше 0")
+		log.Println("вес должен быть больше 0")
 		return 0, errInvalidInput
 	}
 	if height <= 0 {
-		fmt.Println("вес должен быть больше 0")
+		log.Println("вес должен быть больше 0")
 		return 0, errInvalidInput
 	}
 	if duration <= 0 {
-		fmt.Println("продолжительность должна быть больше 0")
+		log.Println("продолжительность должна быть больше 0")
 		return 0, errInvalidInput
 	}
 
@@ -133,19 +133,19 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 }
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	if steps <= 0 {
-		fmt.Println("количество шагов должно быть больше 0")
+		log.Println("количество шагов должно быть больше 0")
 		return 0, errInvalidInput
 	}
 	if weight <= 0 {
-		fmt.Println("вес должен быть больше 0")
+		log.Println("вес должен быть больше 0")
 		return 0, errInvalidInput
 	}
 	if height <= 0 {
-		fmt.Println("рост должен быть больше 0")
+		log.Println("рост должен быть больше 0")
 		return 0, errInvalidInput
 	}
 	if duration <= 0 {
-		fmt.Println("продолжительность должна быть больше 0")
+		log.Println("продолжительность должна быть больше 0")
 		return 0, errInvalidInput
 	}
 

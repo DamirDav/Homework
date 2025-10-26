@@ -3,6 +3,7 @@ package daysteps
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -26,27 +27,27 @@ func parsePackage(data string) (int, time.Duration, error) {
 
 	data = strings.TrimSpace(data)
 	if data == "" {
-		fmt.Println("ожидалось два значения через запятую")
+		log.Println("ожидалось два значения через запятую")
 		return 0, 0, errInvalidInput
 	}
 
 	parts := strings.Split(data, ",")
 	if len(parts) != 2 {
-		fmt.Println("ожидалось два значения через запятую")
+		log.Println("ожидалось два значения через запятую")
 		return 0, 0, errInvalidInput
 	}
 
 	stepsStr := strings.TrimSpace(parts[0])
 	steps, err := strconv.Atoi(stepsStr)
 	if err != nil || steps <= 0 {
-		fmt.Println("количество шагов должно быть больше 0")
+		log.Println("количество шагов должно быть больше 0")
 		return 0, 0, errInvalidInput
 	}
 
 	durationStr := strings.TrimSpace(parts[1])
 	duration, err := time.ParseDuration(durationStr)
 	if err != nil || duration <= 0 {
-		fmt.Println("продолжительность должна быть больше 0")
+		log.Println("продолжительность должна быть больше 0")
 		return 0, 0, errInvalidInput
 	}
 
@@ -57,7 +58,7 @@ func DayActionInfo(data string, weight, height float64) string {
 
 	steps, duration, err := parsePackage(data)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return ""
 	}
 	if steps <= 0 {
@@ -65,11 +66,11 @@ func DayActionInfo(data string, weight, height float64) string {
 	}
 	// Проверяем физические параметры пользователя.
 	if height <= 0 {
-		fmt.Println("Рост должен быть больше 0")
+		log.Println("Рост должен быть больше 0")
 		return ""
 	}
 	if weight <= 0 {
-		fmt.Println("Вес должен быть больше 0")
+		log.Println("Вес должен быть больше 0")
 		return ""
 	}
 
@@ -77,7 +78,7 @@ func DayActionInfo(data string, weight, height float64) string {
 
 	calories, err := spentcalories.WalkingSpentCalories(steps, weight, height, duration)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return ""
 	}
 
