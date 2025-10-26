@@ -1,8 +1,17 @@
 package daysteps
 
 import (
+	"errors"
+	"fmt"
+	"log"
+	"strconv"
+	"strings"
 	"time"
+
+	"github.com/Yandex-Practicum/tracker/internal/spentcalories"
 )
+
+var errInvalidInput = errors.New("invalid input")
 
 const (
 	// Длина одного шага в метрах
@@ -12,9 +21,58 @@ const (
 )
 
 func parsePackage(data string) (int, time.Duration, error) {
-	// TODO: реализовать функцию
+
+	// разбиваем строку формата "шаги,длительность" на компоненты
+	// и возвращаем распарсенные значения либо ошибку валидации.
+
+	parts := strings.Split(data, ",")
+	if len(parts) != 2 {
+		log.Println("ожидалось два значения через запятую")
+		return 0, 0, errInvalidInput
+	}
+
+	steps, err := strconv.Atoi(parts[0])
+	if err != nil || steps <= 0 {
+		log.Println("количество шагов должно быть больше 0")
+		return 0, 0, errInvalidInput
+	}
+
+	duration, err := time.ParseDuration(parts[1])
+	if err != nil || duration <= 0 {
+		log.Println("продолжительность должна быть больше 0")
+		return 0, 0, errInvalidInput
+	}
+
+	return steps, duration, nil
 }
 
 func DayActionInfo(data string, weight, height float64) string {
-	// TODO: реализовать функцию
+
+	steps, duration, err := parsePackage(data)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+	if steps <= 0 {
+		return ""
+	}
+	// Проверяем физические параметры пользователя.
+	if height <= 0 {
+		log.Println("Рост должен быть больше 0")
+		return ""
+	}
+	if weight <= 0 {
+		log.Println("Вес должен быть больше 0")
+		return ""
+	}
+
+	distM := float64(steps) * stepLength / mInKm
+
+	calories, err := spentcalories.WalkingSpentCalories(steps, weight, height, duration)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n", steps, distM, calories)
 }
