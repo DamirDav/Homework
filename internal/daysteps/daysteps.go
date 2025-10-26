@@ -25,27 +25,19 @@ func parsePackage(data string) (int, time.Duration, error) {
 	// разбиваем строку формата "шаги,длительность" на компоненты
 	// и возвращаем распарсенные значения либо ошибку валидации.
 
-	data = strings.TrimSpace(data)
-	if data == "" {
-		log.Println("ожидалось два значения через запятую")
-		return 0, 0, errInvalidInput
-	}
-
 	parts := strings.Split(data, ",")
 	if len(parts) != 2 {
 		log.Println("ожидалось два значения через запятую")
 		return 0, 0, errInvalidInput
 	}
 
-	stepsStr := strings.TrimSpace(parts[0])
-	steps, err := strconv.Atoi(stepsStr)
+	steps, err := strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
 		log.Println("количество шагов должно быть больше 0")
 		return 0, 0, errInvalidInput
 	}
 
-	durationStr := strings.TrimSpace(parts[1])
-	duration, err := time.ParseDuration(durationStr)
+	duration, err := time.ParseDuration(parts[1])
 	if err != nil || duration <= 0 {
 		log.Println("продолжительность должна быть больше 0")
 		return 0, 0, errInvalidInput

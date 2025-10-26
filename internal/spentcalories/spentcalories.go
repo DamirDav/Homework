@@ -22,34 +22,28 @@ const (
 
 func parseTraining(data string) (int, string, time.Duration, error) {
 
-	data = strings.TrimSpace(data)
-
 	parts := strings.Split(data, ",")
 	if len(parts) != 3 {
 		log.Println("ожидалось три значения через запятую")
 		return 0, "", 0, errInvalidInput
 	}
 
-	stepsStr := strings.TrimSpace(parts[0])
-	trainingType := strings.TrimSpace(parts[1])
-	durationStr := strings.TrimSpace(parts[2])
-
-	steps, err := strconv.Atoi(stepsStr)
+	steps, err := strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
 		log.Println("количество шагов должно быть больше 0")
 		return 0, "", 0, errInvalidInput
 	}
 
-	if trainingType == "" {
+	if parts[1] == "" {
 		return 0, "", 0, fmt.Errorf("empty activity")
 	}
 
-	duration, err := time.ParseDuration(durationStr)
+	duration, err := time.ParseDuration(parts[2])
 	if err != nil || duration <= 0 {
 		log.Println("продолжительность должна быть больше 0")
 		return 0, "", 0, errInvalidInput
 	}
-	return steps, trainingType, duration, nil
+	return steps, parts[1], duration, nil
 }
 
 func distance(steps int, height float64) float64 {
